@@ -4,38 +4,42 @@ import kotlin.test.assertEquals
 internal class AocTest {
 
     @Test
-    internal fun `solutionPart1 should return sum of primes multiplied with their list index`() {
+    internal fun `solutionPart1 should return number of times measurement increases`() {
         assertEquals(
             solutionPart1(
                 listOf(
-                    0,
-                    3,
-                    4,
-                    42,
-                    106,
-                    107,
-                    267,
+                    199,
+                    200,
+                    208,
+                    210,
+                    200,
+                    207,
+                    240,
                     269,
+                    260,
+                    263,
                 )
-            ), 2421
+            ), 7
         )
     }
 
     @Test
-    internal fun `solutionPart2 should return sum of non-primes added or subtracted based on index`() {
+    internal fun `solutionPart2 should return number of times the 3-measurement sliding windows are increasing`() {
         assertEquals(
             solutionPart2(
                 listOf(
-                    0,
-                    3,
-                    4,
-                    42,
-                    106,
-                    107,
-                    267,
+                    199,
+                    200,
+                    208,
+                    210,
+                    200,
+                    207,
+                    240,
                     269,
+                    260,
+                    263,
                 )
-            ), 335
+            ), 5
         )
     }
 }
