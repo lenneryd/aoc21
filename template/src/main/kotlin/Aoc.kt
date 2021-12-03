@@ -9,6 +9,8 @@ fun main() {
     println(answer)
 }
 
+fun List<String>.mapInput() = map { it.toInt() }
+
 fun solutionPart1(input: List<Int>) = input.sum()
 
 fun solutionPart2(input: List<Int>) = input.reduce(Int::times)
