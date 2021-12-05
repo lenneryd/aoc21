@@ -6,12 +6,12 @@ internal class AocTest {
     private val list = listOf("1337", "42")
 
     @Test
-    internal fun `solutionPart1 should return sum of input`() {
-        assertEquals(solutionPart1(list.mapInput()), 1379)
+    internal fun `solutionPart1 should return part1 result`() {
+        assertEquals(1379, solutionPart1(list.mapInput()))
     }
 
     @Test
-    internal fun `solutionPart2 should return product of input`() {
-        assertEquals(solutionPart2(list.mapInput()), 56154)
+    internal fun `solutionPart2 should return part2 result`() {
+        assertEquals(56154, solutionPart2(list.mapInput()))
     }
 }
