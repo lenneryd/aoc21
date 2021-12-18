@@ -1,8 +1,11 @@
+import java.io.File
 import kotlin.math.ceil
 import kotlin.math.floor
 
 fun main() {
-    val input = getInput()
+    val input = File("input.txt").readLines().map { line ->
+        line.parseLists()
+    }
     val answer = when (System.getenv("part")) {
         "part2" -> solutionPart2(input)
         else -> solutionPart1(input)
@@ -31,7 +34,6 @@ sealed class Node(open var parent: Snail?) {
 }
 
 fun Node.Snail.reduce(): Node.Snail = this.let { snail ->
-    val original = snail.toString()
     var current = snail
     var performedOperation = true
     while (performedOperation) {
@@ -141,20 +143,22 @@ fun Node.Regular.split(): Node.Snail = this.value.toFloat().let { number ->
     }
 }
 
-fun List<List<Any>>.mapInput(): List<Node> = map { line ->
-    line.parse()
+fun List<*>.mapInput(): List<Node> = map { line ->
+    (line as List<*>).parse()
 }
 
 
 fun List<*>.parse(): Node.Snail = this.let { contents ->
-    val left: Node = when (val left = contents[0]) {
-        is List<*> -> left.parse()
-        else -> Node.Regular(left as Int, null)
+    val leftList = contents[0] as List<*>
+    val left: Node = when (leftList.size) {
+        1 -> Node.Regular(leftList[0] as Int, null)
+        else -> leftList.parse()
     }
 
-    val right = when (val right = contents[1]) {
-        is List<*> -> right.parse()
-        else -> Node.Regular(right as Int, null)
+    val rightList = contents[1] as List<*>
+    val right = when (rightList.size) {
+        1 -> Node.Regular(rightList[0] as Int, null)
+        else -> rightList.parse()
     }
     Node.Snail(left, right, null).also { root ->
         left.parent = root
@@ -162,7 +166,29 @@ fun List<*>.parse(): Node.Snail = this.let { contents ->
     }
 }
 
-fun solutionPart1(input: List<List<Any>>): Long {
+fun String.parseLists(): List<*> {
+    if (this.startsWith("[")) {
+        var bracketCount = 0
+        var commaIndex = 0
+        for ((i, c) in this.withIndex()) {
+            if (c == '[') bracketCount++
+            else if (c == ']') bracketCount--
+            else if (c == ',' && bracketCount == 1) {
+                commaIndex = i
+                break
+            }
+        }
+
+        val left = this.take(commaIndex).drop(1)
+        val right = this.drop(commaIndex + 1).dropLast(1)
+
+        return listOf(left.parseLists(), right.parseLists())
+    } else {
+        return listOf(this.toInt())
+    }
+}
+
+fun solutionPart1(input: List<Any>): Long {
     val nodes = input.mapInput()
 
     val initial: Node.Snail? = null
@@ -176,7 +202,7 @@ fun solutionPart1(input: List<List<Any>>): Long {
     return result!!.magnitude()
 }
 
-fun solutionPart2(input: List<List<Any>>): Long {
+fun solutionPart2(input: List<*>): Long {
     var currentMax = 0L
     for (i in input.indices) {
         for (j in input.indices) {
